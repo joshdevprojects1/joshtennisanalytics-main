@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Baseline — ATP Analytics (Preview)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;0,9..144,900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --bg: #F4F1EA;
+  --ink: #1F1B16;
+  --muted: #7A736A;
+  --grid: #D9D2C5;
+  --clay: #C2410C;
+  --hard: #1E40AF;
+  --grass: #15803D;
+  --neutral: #9CA3AF;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: radial-gradient(circle at 1px 1px, rgba(31,27,22,0.035) 1px, transparent 0);
+  background-size: 18px 18px;
+}
+.display { font-family: "Fraunces", serif; font-weight: 900; letter-spacing: -0.04em; }
+.mono { font-family: "JetBrains Mono", monospace; }
+.container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+/* Header */
+header { border-bottom: 1px solid var(--grid); }
+.header-inner { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; max-width: 1280px; margin: 0 auto; }
+.logo { display: flex; align-items: baseline; gap: 12px; }
+.logo-name { font-family: "Fraunces", serif; font-weight: 900; font-size: 30px; letter-spacing: -0.04em; }
+.logo-tag { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+nav { display: flex; gap: 32px; font-size: 14px; }
+nav a { color: var(--muted); text-decoration: none; padding-bottom: 4px; border-bottom: 2px solid transparent; transition: all 0.15s; }
+nav a.active { color: var(--ink); border-bottom-color: var(--clay); }
+nav a:hover { color: var(--ink); }
+
+/* Main */
+main { padding: 40px 0 80px; }
+
+/* Preview navigation */
+.preview-nav { background: var(--ink); color: var(--bg); padding: 12px 0; position: sticky; top: 0; z-index: 50; }
+.preview-nav-inner { display: flex; gap: 24px; align-items: center; max-width: 1280px; margin: 0 auto; padding: 0 24px; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; }
+.preview-nav strong { color: var(--clay); }
+.preview-nav a { color: var(--bg); text-decoration: none; opacity: 0.6; transition: opacity 0.15s; }
+.preview-nav a:hover { opacity: 1; }
+.preview-nav a.current { opacity: 1; border-bottom: 1px solid var(--clay); padding-bottom: 2px; }
+
+.screen { scroll-margin-top: 60px; padding-bottom: 80px; border-bottom: 2px dashed var(--grid); margin-bottom: 40px; }
+.screen:last-child { border-bottom: none; }
+.screen-label { font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; color: var(--clay); margin-bottom: 8px; padding-top: 20px; }
+
+/* Homepage hero */
+.hero { display: grid; grid-template-columns: 3fr 2fr; gap: 40px; align-items: end; margin-bottom: 64px; }
+.hero-eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--clay); margin-bottom: 16px; }
+.hero-title { font-family: "Fraunces", serif; font-weight: 900; font-size: 72px; line-height: 0.95; letter-spacing: -0.04em; }
+.hero-title span { color: var(--clay); }
+.hero-sub { font-size: 18px; color: var(--muted); max-width: 560px; margin-top: 24px; }
+.search-label { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 12px; }
+.search-input { width: 100%; border: 1px solid var(--grid); background: var(--bg); padding: 16px 20px; font-size: 18px; font-family: inherit; color: var(--ink); outline: none; transition: border-color 0.15s; }
+.search-input:focus { border-color: var(--clay); }
+.search-input::placeholder { color: var(--muted); }
+
+/* Feature grid */
+.features-header { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--grid); padding-bottom: 12px; margin-bottom: 24px; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
+.features { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+.feature { border-bottom: 1px solid var(--grid); padding: 32px; cursor: pointer; transition: background 0.2s, color 0.2s; display: flex; flex-direction: column; justify-content: space-between; min-height: 260px; }
+.feature:nth-child(1), .feature:nth-child(3) { border-right: 1px solid var(--grid); }
+.feature:hover { background: var(--ink); color: var(--bg); }
+.feature:hover .feature-sub { color: rgba(244, 241, 234, 0.7); }
+.feature-num { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--clay); margin-bottom: 24px; }
+.feature-title { font-family: "Fraunces", serif; font-weight: 700; font-size: 28px; letter-spacing: -0.04em; line-height: 1.1; }
+.feature-sub { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.feature-arrow { margin-top: 32px; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; }
+
+/* Page header */
+.page-header { border-bottom: 1px solid var(--grid); padding-bottom: 32px; margin-bottom: 40px; }
+.page-eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--clay); margin-bottom: 12px; }
+.page-title { font-family: "Fraunces", serif; font-weight: 900; font-size: 60px; letter-spacing: -0.04em; line-height: 1; }
+.page-sub { font-size: 18px; color: var(--muted); max-width: 720px; margin-top: 16px; }
+
+/* Controls */
+.controls { display: flex; align-items: flex-end; gap: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--grid); margin-bottom: 32px; }
+.control label { display: block; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; }
+.tabs { display: flex; border: 1px solid var(--grid); }
+.tab { padding: 8px 20px; font-size: 14px; cursor: pointer; transition: all 0.15s; background: transparent; border: none; color: var(--ink); font-family: inherit; }
+.tab.active.clay { background: var(--clay); color: var(--bg); }
+.tab.active.hard { background: var(--hard); color: var(--bg); }
+.tab.active.grass { background: var(--grass); color: var(--bg); }
+.select { border: 1px solid var(--grid); background: var(--bg); padding: 8px 16px; font-size: 14px; font-family: inherit; color: var(--ink); }
+
+/* Translation page: scatter */
+.card { border: 1px solid var(--grid); background: rgba(244, 241, 234, 0.6); padding: 24px; backdrop-filter: blur(8px); }
+.scatter-wrap { position: relative; height: 600px; }
+.quad-label { position: absolute; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
+.quad-label.tl { top: 16px; left: 16px; color: var(--clay); }
+.quad-label.br { bottom: 40px; right: 16px; color: var(--hard); }
+
+/* Top lists */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; margin-bottom: 48px; }
+.top-list { border: 1px solid var(--grid); }
+.top-list-header { padding: 12px 20px; font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--bg); }
+.top-list-header.clay { background: var(--clay); }
+.top-list-header.hard { background: var(--hard); }
+.top-list-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 20px; border-bottom: 1px solid var(--grid); transition: background 0.15s; cursor: pointer; }
+.top-list-row:last-child { border-bottom: none; }
+.top-list-row:hover { background: rgba(217, 210, 197, 0.3); }
+.top-list-left { display: flex; align-items: baseline; gap: 16px; }
+.top-list-num { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); width: 20px; }
+.top-list-name { font-size: 14px; }
+.top-list-val { font-family: "Fraunces", serif; font-weight: 700; font-size: 20px; }
+.top-list-val.pos { color: var(--clay); }
+.top-list-val.neg { color: var(--hard); }
+
+/* Player profile */
+.stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 24px; border-bottom: 1px solid var(--grid); padding-bottom: 40px; margin-bottom: 48px; }
+.stat-label { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 4px; }
+.stat-value { font-family: "Fraunces", serif; font-weight: 700; font-size: 40px; letter-spacing: -0.02em; }
+.stat-value.clay { color: var(--clay); }
+.stat-value.hard { color: var(--hard); }
+.stat-value.grass { color: var(--grass); }
+.surface-badges-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+.surf-card { border: 1px solid var(--grid); padding: 16px; }
+.surf-card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.badge { display: inline-block; border: 1px solid; padding: 2px 8px; font-family: "JetBrains Mono", monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; }
+.badge.clay { background: rgba(194, 65, 12, 0.1); color: var(--clay); border-color: rgba(194, 65, 12, 0.3); }
+.badge.hard { background: rgba(30, 64, 175, 0.1); color: var(--hard); border-color: rgba(30, 64, 175, 0.3); }
+.badge.grass { background: rgba(21, 128, 61, 0.1); color: var(--grass); border-color: rgba(21, 128, 61, 0.3); }
+.surf-count { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+.surf-val { font-family: "Fraunces", serif; font-weight: 700; font-size: 28px; }
+.surf-sub { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* Section heading */
+.section-heading { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+.section-heading h2 { font-family: "Fraunces", serif; font-weight: 700; font-size: 28px; letter-spacing: -0.02em; }
+.section-heading-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+
+/* Footer */
+footer { border-top: 1px solid var(--grid); padding: 24px; font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--muted); max-width: 1280px; margin: 48px auto 0; display: flex; justify-content: space-between; }
+
+/* H2H score bar */
+.h2h-score { border: 1px solid var(--grid); margin-bottom: 48px; }
+.h2h-score-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.h2h-side { padding: 40px; text-align: center; }
+.h2h-side:first-child { border-right: 1px solid var(--grid); }
+.h2h-label { font-family: "JetBrains Mono", monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 8px; }
+.h2h-num { font-family: "Fraunces", serif; font-weight: 900; font-size: 80px; letter-spacing: -0.04em; line-height: 1; }
+.h2h-bar { height: 8px; border-top: 1px solid var(--grid); position: relative; }
+.h2h-bar-fill { position: absolute; inset: 0; display: flex; }
+.h2h-bar-fill > div { height: 100%; }
+
+.legend { display: flex; gap: 24px; margin-top: 16px; font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--muted); }
+.legend-dot { display: inline-block; width: 10px; height: 10px; margin-right: 6px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- Preview navigation (not part of the real site) -->
+<div class="preview-nav">
+  <div class="preview-nav-inner">
+    <strong>Design preview</strong>
+    <a href="#home" class="current">Home</a>
+    <a href="#rankings">Rankings</a>
+    <a href="#translation">Translation</a>
+    <a href="#player">Player</a>
+    <a href="#h2h">H2H</a>
+  </div>
+</div>
+
+<!-- Site header (repeated at top of each screen in reality) -->
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-name">Baseline</span>
+      <span class="logo-tag">ATP · descriptive</span>
+    </div>
+    <nav>
+      <a href="#home" class="active">Overview</a>
+      <a href="#rankings">Rankings</a>
+      <a href="#translation">Surface translation</a>
+      <a href="#player">Players</a>
+      <a href="#h2h">Head-to-head</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ========== HOMEPAGE ========== -->
+<section class="screen" id="home">
+  <div class="screen-label">/ — Homepage</div>
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">Descriptive analytics · ATP tour</div>
+      <h1 class="hero-title">What the match <span>actually</span> said.</h1>
+      <p class="hero-sub">A workbench for surface-specific Elo, translation factors, and player profiling — built on the full public ATP match history.</p>
+    </div>
+    <div>
+      <div class="search-label">Start with a player</div>
+      <input class="search-input" placeholder="Sinner, Alcaraz, Ruud…" />
+    </div>
+  </div>
+
+  <div class="features-header">
+    <span>Explore</span>
+    <span>v0.1 · descriptive only</span>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div>
+        <div class="feature-num">01</div>
+        <div class="feature-title">Surface rankings</div>
+        <div class="feature-sub">Surface-specific Elo ratings for the active ATP tour. Filter by surface, minimum matches, and depth.</div>
+      </div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+    <div class="feature">
+      <div>
+        <div class="feature-num">02</div>
+        <div class="feature-title">Surface translation</div>
+        <div class="feature-sub">Which players carry form across surfaces, and which don't. The clay-vs-hard scatter is the foundation of clay-season reads.</div>
+      </div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+    <div class="feature">
+      <div>
+        <div class="feature-num">03</div>
+        <div class="feature-title">Player profiles</div>
+        <div class="feature-sub">Career stats broken down by surface, rolling form, and Elo trajectories across hard, clay, and grass.</div>
+      </div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+    <div class="feature">
+      <div>
+        <div class="feature-num">04</div>
+        <div class="feature-title">Head-to-head</div>
+        <div class="feature-sub">Complete match history between any two players, filtered by surface and tournament level.</div>
+      </div>
+      <div class="feature-arrow">Open →</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== RANKINGS ========== -->
+<section class="screen" id="rankings">
+  <div class="screen-label">/rankings</div>
+  <div class="page-header">
+    <div class="page-eyebrow">Rankings</div>
+    <h1 class="page-title">Surface-specific Elo</h1>
+    <p class="page-sub">Elo ratings updated after every tour-level match, tracked separately for each surface.</p>
+  </div>
+
+  <div class="controls">
+    <div class="control">
+      <label>Surface</label>
+      <div class="tabs">
+        <button class="tab">Hard</button>
+        <button class="tab active clay">Clay</button>
+        <button class="tab">Grass</button>
+      </div>
+    </div>
+    <div class="control"><label>Depth</label><select class="select"><option>Top 25</option></select></div>
+    <div class="control"><label>Min matches</label><select class="select"><option>20+</option></select></div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 3fr 2fr; gap: 32px;">
+    <!-- Bar chart -->
+    <svg viewBox="0 0 560 620" xmlns="http://www.w3.org/2000/svg" style="background: rgba(244,241,234,0.6); border: 1px solid var(--grid); padding: 16px;">
+      <style>
+        .axis-label { font-family: "Inter", sans-serif; font-size: 11px; fill: #1F1B16; }
+        .axis-line { stroke: #1F1B16; stroke-width: 1; }
+        .grid-line { stroke: #D9D2C5; stroke-opacity: 0.6; stroke-width: 1; }
+        .player-label { font-family: "Inter", sans-serif; font-size: 11px; fill: #1F1B16; text-anchor: end; }
+        .val-label { font-family: "Inter", sans-serif; font-size: 10px; fill: #1F1B16; }
+      </style>
+      <g transform="translate(130, 20)">
+        <!-- Grid -->
+        <line class="grid-line" x1="0" y1="0" x2="0" y2="560" />
+        <line class="grid-line" x1="80" y1="0" x2="80" y2="560" />
+        <line class="grid-line" x1="160" y1="0" x2="160" y2="560" />
+        <line class="grid-line" x1="240" y1="0" x2="240" y2="560" />
+        <line class="grid-line" x1="320" y1="0" x2="320" y2="560" />
+        <line class="grid-line" x1="400" y1="0" x2="400" y2="560" />
+        <!-- Bars (top 15 mock clay ratings) -->
+        <g>
+          <!-- Alcaraz 2060 -->
+          <text class="player-label" x="-8" y="25">Alcaraz C.</text>
+          <rect x="0" y="14" width="400" height="22" fill="#C2410C" />
+          <text class="val-label" x="406" y="29">2060</text>
+          <!-- Djokovic 1985 -->
+          <text class="player-label" x="-8" y="59">Djokovic N.</text>
+          <rect x="0" y="48" width="360" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="366" y="63">1985</text>
+          <!-- Sinner 1942 -->
+          <text class="player-label" x="-8" y="93">Sinner J.</text>
+          <rect x="0" y="82" width="340" height="22" fill="#C2410C" />
+          <text class="val-label" x="346" y="97">1942</text>
+          <!-- Ruud 1910 -->
+          <text class="player-label" x="-8" y="127">Ruud C.</text>
+          <rect x="0" y="116" width="325" height="22" fill="#C2410C" />
+          <text class="val-label" x="331" y="131">1910</text>
+          <!-- Musetti 1876 -->
+          <text class="player-label" x="-8" y="161">Musetti L.</text>
+          <rect x="0" y="150" width="308" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="314" y="165">1876</text>
+          <!-- Tsitsipas 1852 -->
+          <text class="player-label" x="-8" y="195">Tsitsipas S.</text>
+          <rect x="0" y="184" width="295" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="301" y="199">1852</text>
+          <!-- Rune 1820 -->
+          <text class="player-label" x="-8" y="229">Rune H.</text>
+          <rect x="0" y="218" width="280" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="286" y="233">1820</text>
+          <!-- Cerundolo 1795 -->
+          <text class="player-label" x="-8" y="263">Cerundolo F.</text>
+          <rect x="0" y="252" width="265" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="271" y="267">1795</text>
+          <!-- Zverev 1772 -->
+          <text class="player-label" x="-8" y="297">Zverev A.</text>
+          <rect x="0" y="286" width="252" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="258" y="301">1772</text>
+          <!-- Rublev 1754 -->
+          <text class="player-label" x="-8" y="331">Rublev A.</text>
+          <rect x="0" y="320" width="244" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="250" y="335">1754</text>
+          <!-- Dimitrov 1728 -->
+          <text class="player-label" x="-8" y="365">Dimitrov G.</text>
+          <rect x="0" y="354" width="230" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="236" y="369">1728</text>
+          <!-- Auger 1715 -->
+          <text class="player-label" x="-8" y="399">Auger-Aliassime F.</text>
+          <rect x="0" y="388" width="222" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="228" y="403">1715</text>
+          <!-- De Minaur 1698 -->
+          <text class="player-label" x="-8" y="433">De Minaur A.</text>
+          <rect x="0" y="422" width="214" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="220" y="437">1698</text>
+          <!-- Davidovich 1684 -->
+          <text class="player-label" x="-8" y="467">Davidovich Fokina A.</text>
+          <rect x="0" y="456" width="206" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="212" y="471">1684</text>
+          <!-- Arnaldi 1670 -->
+          <text class="player-label" x="-8" y="501">Arnaldi M.</text>
+          <rect x="0" y="490" width="198" height="22" fill="#9CA3AF" />
+          <text class="val-label" x="204" y="505">1670</text>
+        </g>
+        <!-- Axis -->
+        <line class="axis-line" x1="0" y1="560" x2="400" y2="560" />
+        <text class="axis-label" x="0" y="578" text-anchor="middle">1500</text>
+        <text class="axis-label" x="80" y="578" text-anchor="middle">1620</text>
+        <text class="axis-label" x="160" y="578" text-anchor="middle">1740</text>
+        <text class="axis-label" x="240" y="578" text-anchor="middle">1860</text>
+        <text class="axis-label" x="320" y="578" text-anchor="middle">1980</text>
+        <text class="axis-label" x="400" y="578" text-anchor="middle">2100</text>
+      </g>
+    </svg>
+
+    <!-- List -->
+    <div class="top-list">
+      <div class="top-list-header clay" style="background: var(--ink);">Top 15 · Clay</div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">01</span><span class="top-list-name">Alcaraz C.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">87m</span><span class="top-list-val" style="font-size:16px;">2060</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">02</span><span class="top-list-name">Djokovic N.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">264m</span><span class="top-list-val" style="font-size:16px;">1985</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">03</span><span class="top-list-name">Sinner J.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">72m</span><span class="top-list-val" style="font-size:16px;">1942</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">04</span><span class="top-list-name">Ruud C.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">121m</span><span class="top-list-val" style="font-size:16px;">1910</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">05</span><span class="top-list-name">Musetti L.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">89m</span><span class="top-list-val" style="font-size:16px;">1876</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">06</span><span class="top-list-name">Tsitsipas S.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">143m</span><span class="top-list-val" style="font-size:16px;">1852</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">07</span><span class="top-list-name">Rune H.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">65m</span><span class="top-list-val" style="font-size:16px;">1820</span></div></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">08</span><span class="top-list-name">Cerundolo F.</span></div><div style="display:flex;gap:12px;align-items:baseline;"><span class="mono" style="font-size:11px;color:var(--muted);">78m</span><span class="top-list-val" style="font-size:16px;">1795</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TRANSLATION ========== -->
+<section class="screen" id="translation">
+  <div class="screen-label">/translation</div>
+  <div class="page-header">
+    <div class="page-eyebrow">Surface translation</div>
+    <h1 class="page-title">Who actually translates to clay?</h1>
+    <p class="page-sub">Hard court Elo versus clay court Elo for the active ATP tour. Points above the diagonal are clay-positive; below are clay-negative.</p>
+  </div>
+
+  <!-- Scatter plot -->
+  <div class="card">
+    <div class="scatter-wrap">
+      <div class="quad-label tl">Better on clay</div>
+      <div class="quad-label br">Better on hard</div>
+      <svg viewBox="0 0 1100 560" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+        <style>
+          .ax-lbl { font-family: "Inter", sans-serif; font-size: 12px; fill: #1F1B16; }
+          .tick-lbl { font-family: "Inter", sans-serif; font-size: 11px; fill: #1F1B16; }
+          .pt-lbl { font-family: "Inter", sans-serif; font-size: 11px; font-weight: 600; fill: #1F1B16; paint-order: stroke; stroke: #F4F1EA; stroke-width: 3; }
+          .grid-l { stroke: #D9D2C5; stroke-opacity: 0.6; }
+          .ref-l { stroke: #1F1B16; stroke-opacity: 0.5; stroke-dasharray: 4 4; }
+        </style>
+        <g transform="translate(60, 30)">
+          <!-- Grid lines -->
+          <line class="grid-l" x1="0" y1="0" x2="0" y2="480" />
+          <line class="grid-l" x1="200" y1="0" x2="200" y2="480" />
+          <line class="grid-l" x1="400" y1="0" x2="400" y2="480" />
+          <line class="grid-l" x1="600" y1="0" x2="600" y2="480" />
+          <line class="grid-l" x1="800" y1="0" x2="800" y2="480" />
+          <line class="grid-l" x1="1000" y1="0" x2="1000" y2="480" />
+          <line class="grid-l" x1="0" y1="0" x2="1000" y2="0" />
+          <line class="grid-l" x1="0" y1="120" x2="1000" y2="120" />
+          <line class="grid-l" x1="0" y1="240" x2="1000" y2="240" />
+          <line class="grid-l" x1="0" y1="360" x2="1000" y2="360" />
+          <line class="grid-l" x1="0" y1="480" x2="1000" y2="480" />
+
+          <!-- Reference diagonal y=x -->
+          <line class="ref-l" x1="0" y1="480" x2="1000" y2="0" />
+
+          <!-- Neutral dots -->
+          <circle cx="85" cy="265" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="120" cy="320" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="180" cy="160" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="250" cy="380" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="310" cy="295" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="350" cy="215" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="420" cy="340" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="460" cy="165" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="510" cy="245" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="545" cy="305" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="590" cy="175" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="625" cy="215" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="660" cy="395" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="720" cy="280" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="755" cy="355" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="795" cy="225" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="830" cy="310" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="870" cy="150" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+          <circle cx="910" cy="395" r="4.5" fill="#9CA3AF" fill-opacity="0.55" />
+
+          <!-- Highlighted players -->
+          <!-- Cerundolo: hard ~1450, clay ~1660 -> (225, 130) strongly clay-positive -->
+          <circle cx="225" cy="110" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="232" y="100">Cerundolo F.</text>
+          <!-- Rune: hard ~1460, clay ~1632 -> (230, 165) -->
+          <circle cx="235" cy="160" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="242" y="150">Rune H.</text>
+          <!-- Musetti: hard ~1380, clay ~1484 -> strongly clay-positive -->
+          <circle cx="165" cy="220" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="172" y="210">Musetti L.</text>
+          <!-- Ruud: hard ~1592, clay ~1644 -> slight clay-positive, high -->
+          <circle cx="595" cy="140" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="602" y="130">Ruud C.</text>
+          <!-- Djokovic: hard ~1555, clay ~1654 -> clay-positive, high -->
+          <circle cx="540" cy="110" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="547" y="100">Djokovic N.</text>
+          <!-- Alcaraz ~1880/1900 -> clay-positive, very high -->
+          <circle cx="880" cy="45" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="887" y="38">Alcaraz C.</text>
+          <!-- Sinner ~1900/1820 -> slight clay-negative, very high -->
+          <circle cx="920" cy="100" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="770" y="95">Sinner J.</text>
+          <!-- Tsitsipas ~1447/1566 -> clay-positive -->
+          <circle cx="215" cy="290" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="222" y="280">Tsitsipas S.</text>
+
+          <!-- Clay-negative highlights -->
+          <!-- Medvedev ~1830/1660 -> strongly clay-negative -->
+          <circle cx="800" cy="330" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="807" y="325">Medvedev D.</text>
+          <!-- Hurkacz ~1780/1620 -->
+          <circle cx="710" cy="380" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="717" y="375">Hurkacz H.</text>
+          <!-- Shelton ~1730/1620 -->
+          <circle cx="650" cy="420" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="657" y="415">Shelton B.</text>
+          <!-- Fritz ~1790/1640 -->
+          <circle cx="730" cy="360" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="737" y="355">Fritz T.</text>
+          <!-- Draper ~1740/1680 -->
+          <circle cx="680" cy="350" r="7" fill="#C2410C" stroke="#1F1B16" stroke-width="1" />
+          <text class="pt-lbl" x="687" y="345">Draper J.</text>
+
+          <!-- Axis labels -->
+          <text class="tick-lbl" x="0" y="500" text-anchor="middle">1350</text>
+          <text class="tick-lbl" x="200" y="500" text-anchor="middle">1450</text>
+          <text class="tick-lbl" x="400" y="500" text-anchor="middle">1550</text>
+          <text class="tick-lbl" x="600" y="500" text-anchor="middle">1650</text>
+          <text class="tick-lbl" x="800" y="500" text-anchor="middle">1750</text>
+          <text class="tick-lbl" x="1000" y="500" text-anchor="middle">1850</text>
+          <text class="ax-lbl" x="500" y="525" text-anchor="middle">Hard court Elo</text>
+
+          <text class="tick-lbl" x="-10" y="4" text-anchor="end">1950</text>
+          <text class="tick-lbl" x="-10" y="124" text-anchor="end">1800</text>
+          <text class="tick-lbl" x="-10" y="244" text-anchor="end">1650</text>
+          <text class="tick-lbl" x="-10" y="364" text-anchor="end">1500</text>
+          <text class="tick-lbl" x="-10" y="484" text-anchor="end">1350</text>
+          <text class="ax-lbl" x="-240" y="-40" transform="rotate(-90) translate(-240, 10)">Clay court Elo</text>
+        </g>
+      </svg>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--grid);font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);">Click points to highlight. Click twice to open the player profile.</div>
+  </div>
+
+  <!-- Top lists -->
+  <div class="two-col">
+    <div class="top-list">
+      <div class="top-list-header clay">Most clay-positive</div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">01</span><span class="top-list-name">Cerundolo F.</span></div><span class="top-list-val pos">+210</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">02</span><span class="top-list-name">Rune H.</span></div><span class="top-list-val pos">+172</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">03</span><span class="top-list-name">Auger-Aliassime F.</span></div><span class="top-list-val pos">+120</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">04</span><span class="top-list-name">Tsitsipas S.</span></div><span class="top-list-val pos">+119</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">05</span><span class="top-list-name">Musetti L.</span></div><span class="top-list-val pos">+103</span></div>
+    </div>
+    <div class="top-list">
+      <div class="top-list-header hard">Most clay-negative</div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">01</span><span class="top-list-name">Shelton B.</span></div><span class="top-list-val neg">−310</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">02</span><span class="top-list-name">Hurkacz H.</span></div><span class="top-list-val neg">−265</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">03</span><span class="top-list-name">Draper J.</span></div><span class="top-list-val neg">−205</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">04</span><span class="top-list-name">Medvedev D.</span></div><span class="top-list-val neg">−155</span></div>
+      <div class="top-list-row"><div class="top-list-left"><span class="top-list-num">05</span><span class="top-list-name">Fritz T.</span></div><span class="top-list-val neg">−115</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PLAYER ========== -->
+<section class="screen" id="player">
+  <div class="screen-label">/players/206173</div>
+  <div class="page-header">
+    <div class="page-eyebrow">Player profile</div>
+    <h1 class="page-title">Sinner J.</h1>
+    <p class="page-sub">2017—2026  ·  482 tour-level matches</p>
+  </div>
+
+  <div class="stats-row">
+    <div><div class="stat-label">Win rate</div><div class="stat-value">72.2%</div></div>
+    <div><div class="stat-label">Wins</div><div class="stat-value">348</div></div>
+    <div><div class="stat-label">Hard Elo</div><div class="stat-value hard">1900</div></div>
+    <div><div class="stat-label">Clay Elo</div><div class="stat-value clay">1820</div></div>
+    <div><div class="stat-label">Grass Elo</div><div class="stat-value grass">1820</div></div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:40px;font-family:'JetBrains Mono',monospace;font-size:13px;">
+    <span style="color:var(--muted);">Strongest surface:</span>
+    <span class="badge hard">Hard</span>
+  </div>
+
+  <div class="section-heading">
+    <h2>Performance by surface</h2>
+    <span class="section-heading-meta">Career rates  ·  tour-level only</span>
+  </div>
+
+  <div class="card" style="margin-bottom:24px;">
+    <svg viewBox="0 0 1000 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:340px;">
+      <style>
+        .ax { font-family:"Inter",sans-serif;font-size:11px;fill:#1F1B16; }
+        .gl { stroke:#D9D2C5;stroke-opacity:0.6; }
+      </style>
+      <g transform="translate(60, 20)">
+        <!-- H-grid -->
+        <line class="gl" x1="0" y1="0" x2="880" y2="0"/>
+        <line class="gl" x1="0" y1="70" x2="880" y2="70"/>
+        <line class="gl" x1="0" y1="140" x2="880" y2="140"/>
+        <line class="gl" x1="0" y1="210" x2="880" y2="210"/>
+        <line class="gl" x1="0" y1="280" x2="880" y2="280"/>
+        <!-- Y-axis labels -->
+        <text class="ax" x="-10" y="4" text-anchor="end">100%</text>
+        <text class="ax" x="-10" y="74" text-anchor="end">75%</text>
+        <text class="ax" x="-10" y="144" text-anchor="end">50%</text>
+        <text class="ax" x="-10" y="214" text-anchor="end">25%</text>
+        <text class="ax" x="-10" y="284" text-anchor="end">0%</text>
+
+        <!-- Metric groups -->
+        <!-- 5 metrics, each with 3 surfaces -->
+        <!-- Win % -->
+        <g transform="translate(50, 0)">
+          <rect x="0" y="200" width="30" height="80" fill="#1E40AF" />
+          <rect x="32" y="203" width="30" height="77" fill="#C2410C" />
+          <rect x="64" y="199" width="30" height="81" fill="#15803D" />
+          <text class="ax" x="47" y="300" text-anchor="middle">Win %</text>
+        </g>
+        <!-- 1st serve won -->
+        <g transform="translate(240, 0)">
+          <rect x="0" y="200" width="30" height="80" fill="#1E40AF" />
+          <rect x="32" y="204" width="30" height="76" fill="#C2410C" />
+          <rect x="64" y="201" width="30" height="79" fill="#15803D" />
+          <text class="ax" x="47" y="300" text-anchor="middle">1st serve won</text>
+        </g>
+        <!-- 2nd serve won -->
+        <g transform="translate(430, 0)">
+          <rect x="0" y="138" width="30" height="142" fill="#1E40AF" />
+          <rect x="32" y="140" width="30" height="140" fill="#C2410C" />
+          <rect x="64" y="138" width="30" height="142" fill="#15803D" />
+          <text class="ax" x="47" y="300" text-anchor="middle">2nd serve won</text>
+        </g>
+        <!-- Return pts won -->
+        <g transform="translate(620, 0)">
+          <rect x="0" y="170" width="30" height="110" fill="#1E40AF" />
+          <rect x="32" y="167" width="30" height="113" fill="#C2410C" />
+          <rect x="64" y="172" width="30" height="108" fill="#15803D" />
+          <text class="ax" x="47" y="300" text-anchor="middle">Return pts won</text>
+        </g>
+        <!-- BP save -->
+        <g transform="translate(810, 0)">
+          <rect x="0" y="80" width="30" height="200" fill="#1E40AF" />
+          <rect x="32" y="82" width="30" height="198" fill="#C2410C" />
+          <rect x="64" y="78" width="30" height="202" fill="#15803D" />
+          <text class="ax" x="47" y="300" text-anchor="middle">BP save</text>
+        </g>
+      </g>
+    </svg>
+    <div class="legend" style="justify-content:center;">
+      <span><span class="legend-dot" style="background:var(--hard);"></span>Hard</span>
+      <span><span class="legend-dot" style="background:var(--clay);"></span>Clay</span>
+      <span><span class="legend-dot" style="background:var(--grass);"></span>Grass</span>
+    </div>
+  </div>
+
+  <div class="surface-badges-row">
+    <div class="surf-card">
+      <div class="surf-card-head"><span class="badge hard">Hard</span><span class="surf-count">284 matches</span></div>
+      <div class="surf-val">75.4%</div><div class="surf-sub">214 wins  ·  70 losses</div>
+    </div>
+    <div class="surf-card">
+      <div class="surf-card-head"><span class="badge clay">Clay</span><span class="surf-count">128 matches</span></div>
+      <div class="surf-val">68.0%</div><div class="surf-sub">87 wins  ·  41 losses</div>
+    </div>
+    <div class="surf-card">
+      <div class="surf-card-head"><span class="badge grass">Grass</span><span class="surf-count">70 matches</span></div>
+      <div class="surf-val">67.1%</div><div class="surf-sub">47 wins  ·  23 losses</div>
+    </div>
+  </div>
+
+  <div style="margin-top:64px;">
+    <div class="section-heading">
+      <h2>Elo trajectories</h2>
+      <span class="section-heading-meta">Updated after every match</span>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 1100 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:360px;">
+        <style>
+          .ax { font-family:"Inter",sans-serif;font-size:11px;fill:#1F1B16; }
+          .gl { stroke:#D9D2C5;stroke-opacity:0.6; }
+        </style>
+        <g transform="translate(60, 20)">
+          <line class="gl" x1="0" y1="0" x2="1000" y2="0"/>
+          <line class="gl" x1="0" y1="80" x2="1000" y2="80"/>
+          <line class="gl" x1="0" y1="160" x2="1000" y2="160"/>
+          <line class="gl" x1="0" y1="240" x2="1000" y2="240"/>
+          <line class="gl" x1="0" y1="320" x2="1000" y2="320"/>
+          <text class="ax" x="-10" y="4" text-anchor="end">2000</text>
+          <text class="ax" x="-10" y="84" text-anchor="end">1850</text>
+          <text class="ax" x="-10" y="164" text-anchor="end">1700</text>
+          <text class="ax" x="-10" y="244" text-anchor="end">1550</text>
+          <text class="ax" x="-10" y="324" text-anchor="end">1400</text>
+          <!-- Hard line (blue) -->
+          <path d="M 0 280 Q 100 270 160 240 T 320 180 T 500 140 T 700 110 T 900 90 L 1000 80" fill="none" stroke="#1E40AF" stroke-width="2.2"/>
+          <!-- Clay line (rust) -->
+          <path d="M 0 295 Q 100 285 160 260 T 320 210 T 500 170 T 700 140 T 900 120 L 1000 115" fill="none" stroke="#C2410C" stroke-width="2.2"/>
+          <!-- Grass line (green) -->
+          <path d="M 0 290 Q 100 280 160 255 T 320 200 T 500 170 T 700 135 T 900 118 L 1000 120" fill="none" stroke="#15803D" stroke-width="2.2"/>
+          <!-- X axis ticks -->
+          <text class="ax" x="0" y="344" text-anchor="middle">2017</text>
+          <text class="ax" x="250" y="344" text-anchor="middle">2020</text>
+          <text class="ax" x="500" y="344" text-anchor="middle">2022</text>
+          <text class="ax" x="750" y="344" text-anchor="middle">2024</text>
+          <text class="ax" x="1000" y="344" text-anchor="middle">2026</text>
+        </g>
+      </svg>
+      <div class="legend" style="justify-content:center;">
+        <span><span class="legend-dot" style="background:var(--hard);"></span>Hard</span>
+        <span><span class="legend-dot" style="background:var(--clay);"></span>Clay</span>
+        <span><span class="legend-dot" style="background:var(--grass);"></span>Grass</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== H2H ========== -->
+<section class="screen" id="h2h">
+  <div class="screen-label">/h2h</div>
+  <div class="page-header">
+    <div class="page-eyebrow">Head-to-head</div>
+    <h1 class="page-title">Two players, all the tape</h1>
+    <p class="page-sub">Full tour-level match history between any two players, broken down by surface.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px;">
+    <div>
+      <div class="search-label">Player A</div>
+      <input class="search-input" value="Sinner J." />
+    </div>
+    <div>
+      <div class="search-label">Player B</div>
+      <input class="search-input" value="Alcaraz C." />
+    </div>
+  </div>
+
+  <div class="h2h-score">
+    <div class="h2h-score-grid">
+      <div class="h2h-side">
+        <div class="h2h-label">Sinner J.</div>
+        <div class="h2h-num">5</div>
+      </div>
+      <div class="h2h-side">
+        <div class="h2h-label">Alcaraz C.</div>
+        <div class="h2h-num">7</div>
+      </div>
+    </div>
+    <div class="h2h-bar">
+      <div class="h2h-bar-fill">
+        <div style="width:41.7%;background:var(--clay);"></div>
+        <div style="width:58.3%;background:var(--hard);"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:28px;margin-bottom:16px;">By surface</h2>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:48px;">
+    <div class="card">
+      <div style="margin-bottom:16px;"><span class="badge hard">Hard</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <div><div class="surf-val">3</div><div class="surf-sub">Sinner</div></div>
+        <div style="text-align:right;"><div class="surf-val">4</div><div class="surf-sub">Alcaraz</div></div>
+      </div>
+      <div style="height:6px;background:var(--grid);margin-top:16px;position:relative;">
+        <div style="position:absolute;inset:0;width:42.9%;background:var(--clay);"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="margin-bottom:16px;"><span class="badge clay">Clay</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <div><div class="surf-val">1</div><div class="surf-sub">Sinner</div></div>
+        <div style="text-align:right;"><div class="surf-val">2</div><div class="surf-sub">Alcaraz</div></div>
+      </div>
+      <div style="height:6px;background:var(--grid);margin-top:16px;position:relative;">
+        <div style="position:absolute;inset:0;width:33.3%;background:var(--clay);"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="margin-bottom:16px;"><span class="badge grass">Grass</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
+        <div><div class="surf-val">1</div><div class="surf-sub">Sinner</div></div>
+        <div style="text-align:right;"><div class="surf-val">1</div><div class="surf-sub">Alcaraz</div></div>
+      </div>
+      <div style="height:6px;background:var(--grid);margin-top:16px;position:relative;">
+        <div style="position:absolute;inset:0;width:50%;background:var(--clay);"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="font-family:'Fraunces',serif;font-weight:700;font-size:28px;margin-bottom:16px;">All matches</h2>
+  <div style="border:1px solid var(--grid);">
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:8px 16px;background:var(--ink);color:var(--bg);font-family:'JetBrains Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.15em;">
+      <div>Date</div><div>Tournament</div><div>Surface</div><div>Winner</div><div>Score</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:12px 16px;border-bottom:1px solid var(--grid);font-size:14px;">
+      <div class="mono" style="font-size:12px;color:var(--muted);">2026-03-30</div>
+      <div>Miami Open</div>
+      <div><span class="badge hard">Hard</span></div>
+      <div style="font-weight:500;">Alcaraz C.</div>
+      <div class="mono" style="font-size:12px;color:var(--muted);">7-6 6-4</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:12px 16px;border-bottom:1px solid var(--grid);font-size:14px;">
+      <div class="mono" style="font-size:12px;color:var(--muted);">2026-03-15</div>
+      <div>Indian Wells</div>
+      <div><span class="badge hard">Hard</span></div>
+      <div style="font-weight:500;">Sinner J.</div>
+      <div class="mono" style="font-size:12px;color:var(--muted);">6-4 6-3</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:12px 16px;border-bottom:1px solid var(--grid);font-size:14px;">
+      <div class="mono" style="font-size:12px;color:var(--muted);">2025-11-17</div>
+      <div>ATP Finals</div>
+      <div><span class="badge hard">Hard</span></div>
+      <div style="font-weight:500;">Alcaraz C.</div>
+      <div class="mono" style="font-size:12px;color:var(--muted);">6-3 6-2</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:12px 16px;border-bottom:1px solid var(--grid);font-size:14px;">
+      <div class="mono" style="font-size:12px;color:var(--muted);">2025-07-13</div>
+      <div>Wimbledon</div>
+      <div><span class="badge grass">Grass</span></div>
+      <div style="font-weight:500;">Sinner J.</div>
+      <div class="mono" style="font-size:12px;color:var(--muted);">6-4 6-7 6-3 6-4</div>
+    </div>
+    <div style="display:grid;grid-template-columns:100px 1fr 80px 1fr 1fr;padding:12px 16px;font-size:14px;">
+      <div class="mono" style="font-size:12px;color:var(--muted);">2025-06-08</div>
+      <div>Roland Garros</div>
+      <div><span class="badge clay">Clay</span></div>
+      <div style="font-weight:500;">Alcaraz C.</div>
+      <div class="mono" style="font-size:12px;color:var(--muted);">4-6 6-7 6-4 7-6 7-6</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>Baseline  ·  descriptive ATP analytics</span>
+  <span>data: tennis_atp (J. Sackmann)</span>
+</footer>
+
+<script>
+document.querySelectorAll('.preview-nav a').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      document.querySelectorAll('.preview-nav a').forEach(a => a.classList.remove('current'));
+      link.classList.add('current');
+    }
+  });
+});
+</script>
+</body>
+</html>
