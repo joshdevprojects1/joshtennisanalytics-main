@@ -39,7 +39,6 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://joshtennisanalytics-josh-hilgers-projects.vercel.app/",
-        "https://joshtennisanalytics-production.up.railway.app"
         # Add your production frontend URL here
     ],
     allow_credentials=True,
